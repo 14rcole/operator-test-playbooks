@@ -155,11 +155,12 @@
   - name: "Set facts for csv_data alm-examples"
     set_fact:
       csv_alm_examples: "{{ (csv_vars | from_yaml).metadata.annotations['alm-examples'] }}"
+    when: metadata.annotations['alm-examples'] is defined
 
   - name: "Fail when alm-examples are set to empty"
     fail:
       msg: "Failed due to CSV.metadata.annotations['alm-examples'] is set to empty"
-    when: csv_alm_examples | length == 0
+    when: csv_alm_examples is not defined or csv_alm_examples | length == 0
 
   - name: "Determine and setfact for podname"
     set_fact:
